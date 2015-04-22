@@ -27,8 +27,18 @@ if [ -e "/bazooka-key" ]; then
   chmod 0600 /bazooka-key
 fi
 
-hg clone "$BZK_SCM_URL" /bazooka
+if [ -z "$UPDATE" ]; then
+  echo "performing a fresh checkout"
+  hg clone "$BZK_SCM_URL" /bazooka
+else
+  echo "performing an update"
+  pushd /bazooka
+  hg pull
+  hg purge --all
+  popd
+fi
+
 pushd /bazooka
-  hg update "$BZK_SCM_REFERENCE"
+  hg update "$BZK_SCM_REFERENCE" -C
   extract_meta
 popd
