@@ -1,9 +1,8 @@
-FROM debian:jessie
+FROM alpine:3.1
 
-RUN apt-get update \
-	&& apt-get install -y mercurial \
-	&& apt-get clean \
-	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apk --update add mercurial openssh bash
+
+RUN mkdir -p /etc/mercurial
 
 ADD run.sh /run.sh
 RUN echo "    IdentityFile /bazooka-key" >> /etc/ssh/ssh_config
